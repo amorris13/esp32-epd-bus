@@ -27,6 +27,7 @@
 
 // copy the constructor from GxEPD2display_selection.h of GxEPD_Example to here
 // and adapt it to the ESP32 Driver wiring, e.g.
+// This is for GDEY075T7
 GxEPD2_BW<GxEPD2_750_T7, GxEPD2_750_T7::HEIGHT / 2> display(
     GxEPD2_750_T7(PIN_EPD_CS, PIN_EPD_DC, PIN_EPD_RST,
                   PIN_EPD_BUSY));  // GDEW075T7 800x480, EK79655 (GD7965)
@@ -98,7 +99,7 @@ void loop() {
   }
 
   // Fetch
-  app->fetchData();
+  bool fetchSuccess = app->fetchData();
 
   uint32_t fetchComplete = millis();
   Serial.printf("Fetched data in %lu millis.\n", fetchComplete - start);
@@ -109,7 +110,11 @@ void loop() {
     display.fillScreen(GxEPD_WHITE);
     // display.drawRect(X_MARGIN, Y_MARGIN, display.width() - X_MARGIN * 2,
     //                  display.height() - Y_MARGIN * 2, GxEPD_BLACK);
-    app->render();
+    if (fetchSuccess) {
+      app->render();
+    } else {
+      renderer.drawError(epd_bitmap_mdi__error, "Data Fetch Failed");
+    }
   } while (display.nextPage());
 
   uint32_t renderComplete = millis();
