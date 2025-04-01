@@ -103,7 +103,6 @@ bool Bus::fetchForStopId(const char *stopId, JsonDocument &stopDoc) {
     filter["stopEvents"][0]["location"]["parent"]["disassembledName"] = true;
     filter["stopEvents"][0]["transportation"]["disassembledName"] = true;
     filter["stopEvents"][0]["transportation"]["product"]["iconId"] = true;
-    filter["stopEvents"][0]["transportation"]["origin"]["name"] = true;
     filter["stopEvents"][0]["transportation"]["destination"]["name"] = true;
 
     DeserializationError err = deserializeJson(
